@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+venv/
+.env
+.env.*
+
+# Docker
+*.db
+postgres_data/
+
+# VSCode
+.vscode/
+
+# Pytest
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Misc
+*.sqlite3
+*.egg-info/
+
+# Test output
+test-results/
+
+# Jupyter
+.ipynb_checkpoints/ 
