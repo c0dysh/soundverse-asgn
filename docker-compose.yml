@@ -11,16 +11,39 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
   web:
     build: .
-    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    command: /docker-entrypoint.sh
     volumes:
       - .:/app
     ports:
-      - "8002:8000"
+      - "8000:8000"
     environment:
       DATABASE_URL: postgresql://postgres:postgres@db:5432/soundverse
     depends_on:
+      db:
+        condition: service_healthy
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    depends_on:
+      - web
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3001:3000"
+    depends_on:
+      - prometheus
       - db
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
 volumes:
   postgres_data: 

@@ -4,7 +4,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'app'))
 from app.database import SessionLocal, engine
 from app.models import Base, Clip
 
-# Create tables
+# Ensure tables are created before seeding
 Base.metadata.create_all(bind=engine)
 
 def seed():

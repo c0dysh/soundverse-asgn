@@ -5,6 +5,7 @@ from .. import crud, schemas, models
 from ..database import get_db
 import requests
 import tempfile
+from ..monitoring import clip_view_counter, clip_create_counter
 
 router = APIRouter(prefix="/clips", tags=["clips"])
 
@@ -17,6 +18,8 @@ def stream_clip(clip_id: int, db: Session = Depends(get_db)):
     clip = crud.increment_play_count(db, clip_id)
     if not clip:
         raise HTTPException(status_code=404, detail="Clip not found")
+    # Increment Prometheus counter for views
+    clip_view_counter.labels(clip_id=str(clip.id), genre=clip.genre).inc()
     headers = {"User-Agent": "Mozilla/5.0"}
     r = requests.get(clip.audio_url, stream=True, headers=headers)
     r.raise_for_status()
@@ -31,4 +34,6 @@ def clip_stats(clip_id: int, db: Session = Depends(get_db)):
 
 @router.post("/", response_model=schemas.Clip)
 def create_clip(clip: schemas.ClipCreate, db: Session = Depends(get_db)):
-    return crud.create_clip(db, clip) 
+    # Increment Prometheus counter for creates
+    clip_create_counter.labels(genre=clip.genre).inc()
+    return crud.create_clip(db, clip)

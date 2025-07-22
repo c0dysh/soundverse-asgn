@@ -1,0 +1,102 @@
+{
+  "id": null,
+  "uid": "fastapi-metrics",
+  "title": "FastAPI Metrics",
+  "tags": ["fastapi", "prometheus"],
+  "timezone": "browser",
+  "schemaVersion": 30,
+  "version": 2,
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Total Clip Streams",
+      "gridPos": {"x": 0, "y": 0, "w": 8, "h": 4},
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(clip_views_total)",
+          "legendFormat": "Total Streams"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Streams by Clip ID",
+      "gridPos": {"x": 8, "y": 0, "w": 8, "h": 4},
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum by (clip_id) (clip_views_total)",
+          "legendFormat": "Clip {{clip_id}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Streams by Genre",
+      "gridPos": {"x": 0, "y": 4, "w": 8, "h": 4},
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum by (genre) (clip_views_total)",
+          "legendFormat": "{{genre}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Total Clips Created",
+      "gridPos": {"x": 8, "y": 4, "w": 8, "h": 4},
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum(clip_creates_total)",
+          "legendFormat": "Total Created"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Clips Created by Genre",
+      "gridPos": {"x": 0, "y": 8, "w": 8, "h": 4},
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "sum by (genre) (clip_creates_total)",
+          "legendFormat": "{{genre}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short"
+        },
+        "overrides": []
+      }
+    }
+  ]
+} 
